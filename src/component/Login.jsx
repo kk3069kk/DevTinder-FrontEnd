@@ -4,12 +4,20 @@ import { useDispatch } from 'react-redux';
 import { addUser } from '../utils/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../utils/constants';
+import { useSelector } from 'react-redux';
+
 
 const Login = () => {
   const [emailId,setEmailId] = useState("kkk@gmail.com");
   const [password,setPassword] = useState("Googlechrome@1");
+  const [errorMessage,setErrorMessage] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const userData = useSelector((state) => state.user);
+  if(userData){
+    navigate("/");
+    return;
+  }
   const handleLogin = async () => {
     try {
       const response = await axios.post(API_URL+"/login",{
@@ -23,6 +31,7 @@ const Login = () => {
       console.log(response.data);
     } catch (error) {
       console.log("Error: ",error.message);
+      setErrorMessage("Invalid email or password");
     }
   }
   return (
@@ -66,7 +75,7 @@ const Login = () => {
         </div>
 
       </div>
-
+       <p className="text-red-500 text-center mt-2">{errorMessage}</p>
       <div className="card-actions justify-center mt-6">
         <button className="btn w-full bg-indigo-600 hover:bg-indigo-700 text-white border-none"
         onClick={handleLogin}
