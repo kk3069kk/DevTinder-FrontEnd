@@ -15,30 +15,30 @@ const Body = () => {
   const userData = useSelector((state) => state.user);
 
   const fetchUser = async () => {
-    if(userData){
+    if (userData && typeof userData === "object" && userData._id) {
       return;
     }
     try {
-      const response = await axios.get(API_URL+"/profile/views",{
-        withCredentials:true,
+      const response = await axios.get(API_URL + "/profile/views", {
+        withCredentials: true,
       });
       dispatch(addUser(response.data));
     } catch (error) {
       navigate("/login");
-      console.log("Error: ",error.message);
+      console.log("Error: ", error.message);
     }
   }
 
   useEffect(() => {
-    
-      fetchUser();
-  
-  }, []); 
+
+    fetchUser();
+
+  }, []);
   return (
     <div>
-        <Navbar/>
-        <Outlet/>
-        <Footer/>
+      <Navbar />
+      <Outlet />
+      <Footer />
 
     </div>
   )
