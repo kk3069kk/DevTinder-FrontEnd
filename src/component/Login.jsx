@@ -5,6 +5,7 @@ import { addUser } from '../utils/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../utils/constants';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 
 const Login = () => {
@@ -84,6 +85,7 @@ const Login = () => {
             >
               LOGIN
             </button>
+            <p>New User ? <Link to="/signup">SignUp</Link></p>
           </div>
 
         </div>

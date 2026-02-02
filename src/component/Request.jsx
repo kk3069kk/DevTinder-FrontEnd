@@ -4,6 +4,7 @@ import { API_URL } from "../utils/constants";
 import { addRequest } from "../utils/requestSlice";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { removeRequest } from "../utils/requestSlice";
 
 const Request = () => {
     const dispatch = useDispatch();
@@ -61,7 +62,7 @@ const Request = () => {
             <h1 className="text-3xl font-bold mb-8 text-white">Your Requests</h1>
             <div className="w-full max-w-4xl space-y-4">
                 {userRequest.map((request) => {
-                    const { _id, firstName, lastName, age, gender, about, skills, photoURL } = request;
+                    const { _id, firstName, lastName, age, gender, about, skills, photoURL } = request.fromUserId;
                     return (
                         <div key={_id} className="card card-side bg-base-300 shadow-xl hover:bg-base-200 transition-all duration-300 border border-base-200">
                             <figure className="p-4">
