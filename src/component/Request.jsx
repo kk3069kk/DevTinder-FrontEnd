@@ -9,6 +9,17 @@ const Request = () => {
     const dispatch = useDispatch();
     const userRequest = useSelector((state) => state.request);
 
+    const handleStatus = async (status , id) => {
+        try {
+            const response = await axios.post(API_URL + "/request/review/" + status + "/" + id,{}, {
+                withCredentials: true,
+            })
+            dispatch(removeRequest(id));
+        } catch (error) {
+            console.log("Error: ", error.message);
+        }
+    }
+
     const handleRequest = async () => {
         try {
             const response = await axios.get(API_URL + "/user/request/received", {
@@ -86,6 +97,14 @@ const Request = () => {
                                         ))}
                                     </div>
                                 )}
+                            </div>
+                            <div className="card-actions">
+                                <button className="btn btn-primary"
+                                onClick={() => handleStatus("accepted" , _id)}
+                                >Accept</button>
+                                <button className="btn btn-error"
+                                onClick={() => handleStatus("rejected" , _id)}
+                                >Reject</button>
                             </div>
                         </div>
                     );
