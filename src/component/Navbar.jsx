@@ -5,6 +5,7 @@ import { API_URL } from "../utils/constants";
 import { removeUser } from "../utils/userSlice";
 import { useDispatch } from "react-redux";
 
+
 const Navbar = () => {
   const user = useSelector((store) => store.user);
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ const Navbar = () => {
                 <span className="badge">New</span>
               </Link>
             </li>
-            <li><a>Settings</a></li>
+            <li><Link to="/connection">Connection</Link></li>
             <li><a onClick={handleLogout}>Logout</a></li>
           </ul>
         </div>
