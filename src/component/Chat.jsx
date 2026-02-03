@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import {createSocketConnection} from "../utils/socket.js";
-import {useSelector} from "react-redux";
+import { createSocketConnection } from "../utils/socket.js";
+import { useSelector } from "react-redux";
 
 const Chat = () => {
     const { chatId } = useParams();
@@ -11,37 +11,36 @@ const Chat = () => {
     const userId = user?._id;
 
     useEffect(() => {
-        if(!userId) return;
+        if (!userId) return;
         const socket = createSocketConnection();
-        socket.emit("joinChat", { firstName:user.firstName,chatId ,userId});
+        socket.emit("joinChat", { firstName: user.firstName, chatId, userId });
 
-        socket.on("messageReceived", ({ firstName, text }) => {
-           setMessages((prevMessages) => [
-            ...prevMessages,
-            {
-                id: Date.now(),
-                text,
-                sender: firstName === user.firstName ? "me" : "other",
-                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            },
-        ]);
-
+        socket.on("messageRecieved", ({ firstName, text }) => {
+            setMessages((prevMessages) => [
+                ...prevMessages,
+                {
+                    id: Date.now(),
+                    text,
+                    sender: firstName === user.firstName ? "me" : "other",
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                },
+            ]);
         });
 
         return () => {
             socket.disconnect();
         };
-    }, [chatId,userId]);
-    
+    }, [chatId, userId, user?.firstName]);
+
     const handleSendMessage = () => {
-        if(!user) return;
-        if(!newMessage.trim()) return;
+        if (!user) return;
+        if (!newMessage.trim()) return;
         const socket = createSocketConnection();
-        socket.emit("sendMessage", { 
-            firstName:user.firstName,
+        socket.emit("sendMessage", {
+            firstName: user.firstName,
             chatId,
             userId,
-            text:newMessage
+            text: newMessage
         });
         setNewMessage("");
     };
@@ -96,7 +95,7 @@ const Chat = () => {
                         onChange={(e) => setNewMessage(e.target.value)}
                     />
                     <button className="btn btn-primary px-6 shadow-lg shadow-primary/20 hover:scale-105 transition-transform"
-                    onClick={handleSendMessage}
+                        onClick={handleSendMessage}
                     >
                         Send
                     </button>
