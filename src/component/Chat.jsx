@@ -5,19 +5,28 @@ import {useSelector} from "react-redux";
 
 const Chat = () => {
     const { chatId } = useParams();
-    const [messages, setMessages] = useState([
-        { id: 1, text: "Hey! How's it going?", sender: "other", time: "12:45" },
-        { id: 2, text: "Pretty good! Just working on this chat UI.", sender: "me", time: "12:46" },
-        { id: 3, text: "It looks awesome already!", sender: "other", time: "12:46" },
-    ]);
+    const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
     const user = useSelector((state) => state.user);
     const userId = user?._id;
 
     useEffect(() => {
-        if(!userId || !chatId) return;
+        if(!userId) return;
         const socket = createSocketConnection();
-        socket.emit("joinChat", { chatId ,userId});
+        socket.emit("joinChat", { firstName:user.firstName,chatId ,userId});
+
+        socket.on("messageReceived", ({ firstName, text }) => {
+           setMessages((prevMessages) => [
+            ...prevMessages,
+            {
+                id: Date.now(),
+                text,
+                sender: firstName === user.firstName ? "me" : "other",
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            },
+        ]);
+
+        });
 
         return () => {
             socket.disconnect();
