@@ -1,5 +1,7 @@
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {createSocketConnection} from "../utils/socket.js";
+import {useSelector} from "react-redux";
 
 const Chat = () => {
     const { chatId } = useParams();
@@ -9,6 +11,32 @@ const Chat = () => {
         { id: 3, text: "It looks awesome already!", sender: "other", time: "12:46" },
     ]);
     const [newMessage, setNewMessage] = useState("");
+    const user = useSelector((state) => state.user);
+    const userId = user?._id;
+
+    useEffect(() => {
+        if(!userId || !chatId) return;
+        const socket = createSocketConnection();
+        socket.emit("joinChat", { chatId ,userId});
+
+        return () => {
+            socket.disconnect();
+        };
+    }, [chatId,userId]);
+    
+    const handleSendMessage = () => {
+        if(!user) return;
+        if(!newMessage.trim()) return;
+        const socket = createSocketConnection();
+        socket.emit("sendMessage", { 
+            firstName:user.firstName,
+            chatId,
+            userId,
+            text:newMessage
+        });
+        setNewMessage("");
+    };
+
 
     return (
         <div className="flex flex-col h-[calc(100vh-140px)] max-w-4xl mx-auto bg-base-300 shadow-2xl rounded-3xl overflow-hidden border border-base-200 mt-4 mb-4">
@@ -58,7 +86,9 @@ const Chat = () => {
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
                     />
-                    <button className="btn btn-primary px-6 shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
+                    <button className="btn btn-primary px-6 shadow-lg shadow-primary/20 hover:scale-105 transition-transform"
+                    onClick={handleSendMessage}
+                    >
                         Send
                     </button>
                 </div>
