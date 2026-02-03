@@ -4,6 +4,7 @@ import { API_URL } from "../utils/constants"
 import { useDispatch } from "react-redux"
 import { addConnection } from "../utils/connectionSlice"
 import { useSelector } from "react-redux"
+import { Link } from "react-router-dom"
 
 const Connection = () => {
 
@@ -72,6 +73,9 @@ const Connection = () => {
                                         {age && <div className="badge badge-secondary badge-outline">{age} yrs</div>}
                                         {gender && <div className="badge badge-accent badge-outline capitalize">{gender}</div>}
                                     </div>
+                                    <Link to={`/chat/${_id}`}>
+                                        <button className="btn btn-primary">Chat</button>
+                                    </Link>
                                 </div>
 
                                 {about && (
