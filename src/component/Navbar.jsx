@@ -1,9 +1,8 @@
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { API_URL } from "../utils/constants";
 import { removeUser } from "../utils/userSlice";
 import { useDispatch } from "react-redux";
+import apiClient from "../utils/apiClient";
 
 
 const Navbar = () => {
@@ -13,10 +12,9 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post(API_URL + "/logout", {}, {
-        withCredentials: true,
-      });
+      await apiClient.post("/logout");
       dispatch(removeUser());
+      localStorage.clear(); // Clear token and other potential data
       navigate("/login");
     } catch (error) {
       console.log("Error: ", error.message);

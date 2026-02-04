@@ -2,9 +2,8 @@ import { Outlet } from "react-router-dom"
 import Navbar from "./Navbar"
 import Footer from "./Footer"
 import { useDispatch } from "react-redux";
-import axios from "axios";
-import { API_URL } from "../utils/constants";
 import { addUser } from "../utils/userSlice";
+import apiClient from "../utils/apiClient";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -19,9 +18,7 @@ const Body = () => {
       return;
     }
     try {
-      const response = await axios.get(API_URL + "/profile/views", {
-        withCredentials: true,
-      });
+      const response = await apiClient.get("/profile/views");
       dispatch(addUser(response.data));
     } catch (error) {
       navigate("/login");

@@ -1,9 +1,7 @@
 import { useEffect } from "react"
-import axios from "axios"
-import { API_URL } from "../utils/constants"
-import { useDispatch } from "react-redux"
+import apiClient from "../utils/apiClient"
+import { useDispatch, useSelector } from "react-redux"
 import { addConnection } from "../utils/connectionSlice"
-import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 
 const Connection = () => {
@@ -14,9 +12,7 @@ const Connection = () => {
         if (userConnection) return;
         try {
 
-            const response = await axios.get(API_URL + "/user/connection", {
-                withCredentials: true,
-            })
+            const response = await apiClient.get("/user/connection")
             console.log(response?.data?.data);
             dispatch(addConnection(response?.data?.data));
 

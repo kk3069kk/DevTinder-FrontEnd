@@ -1,5 +1,4 @@
-import axios from "axios";
-import { API_URL } from "../utils/constants";
+import apiClient from "../utils/apiClient";
 import { useDispatch } from "react-redux";
 import { removeFeed } from "../utils/feedSlice";
 
@@ -7,13 +6,11 @@ const Card = ({ user }) => {
     const dispatch = useDispatch();
     if (!user) return null;
 
-    const { _id,firstName, lastName, photoURL, age, gender, about,skills } = user;
-      
-    const handleSendRequest = async (status,id) => {
+    const { _id, firstName, lastName, photoURL, age, gender, about, skills } = user;
+
+    const handleSendRequest = async (status, id) => {
         try {
-            const response = await axios.post(API_URL + "/request/send/" + status +"/"+ id,{}, {
-                withCredentials: true,
-            })
+            await apiClient.post("/request/send/" + status + "/" + id);
             dispatch(removeFeed(id));
         } catch (error) {
             console.log("Error: ", error.message);
@@ -39,14 +36,14 @@ const Card = ({ user }) => {
                 <p className="text-gray-400 italic line-clamp-3">
                     {about || "No bio provided."}
                 </p>
-                <p>{skills &&skills.join(", ")}</p>
+                <p>{skills && skills.join(", ")}</p>
 
                 <div className="card-actions justify-center mt-4 w-full">
                     <button className="btn btn-primary flex-1"
-                    onClick={()=> handleSendRequest("ignored",_id)}
+                        onClick={() => handleSendRequest("ignored", _id)}
                     >Ignore</button>
                     <button className="btn btn-secondary flex-1"
-                    onClick={()=> handleSendRequest("interested",_id)}
+                        onClick={() => handleSendRequest("interested", _id)}
                     >Interested</button>
                 </div>
             </div>

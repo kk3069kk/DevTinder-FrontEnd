@@ -1,12 +1,8 @@
-import  { useState,useEffect } from 'react'
-import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
 import { addUser } from '../utils/userSlice';
-import { useNavigate } from 'react-router-dom';
-import { API_URL } from '../utils/constants';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-
+import apiClient from '../utils/apiClient';
 
 const Login = () => {
   const [emailId, setEmailId] = useState("kk1@gmail.com");
@@ -21,20 +17,24 @@ const Login = () => {
       navigate("/");
     }
   }, [userData, navigate]);
+
   const handleLogin = async () => {
     try {
-      const response = await axios.post(API_URL + "/login", {
+      const response = await apiClient.post("/login", {
         emailId,
         password
-      }, {
-        withCredentials: true,
       });
-      dispatch(addUser(response.data));
+
+      const { user, token } = response.data;
+
+      localStorage.setItem("token", token);
+
+      dispatch(addUser(user));
+
       navigate("/");
-      console.log(response.data);
     } catch (error) {
-      console.log("Error: ", error.message);
-      setErrorMessage("Invalid email or password");
+      console.error("Error: ", error.message);
+      setErrorMessage(error.response?.data?.message || "Invalid email or password");
     }
   }
   return (
@@ -63,7 +63,7 @@ const Login = () => {
               />
             </div>
 
-            {/* Password */}
+
             <div>
               <label className="label">
                 <span className="label-text text-gray-300">Password</span>

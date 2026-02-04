@@ -1,20 +1,15 @@
-import { useDispatch } from "react-redux";
-import axios from "axios";
-import { API_URL } from "../utils/constants";
-import { addRequest } from "../utils/requestSlice";
+import apiClient from "../utils/apiClient";
+import { addRequest, removeRequest } from "../utils/requestSlice";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { removeRequest } from "../utils/requestSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 const Request = () => {
     const dispatch = useDispatch();
     const userRequest = useSelector((state) => state.request);
 
-    const handleStatus = async (status , id) => {
+    const handleStatus = async (status, id) => {
         try {
-            const response = await axios.post(API_URL + "/request/review/" + status + "/" + id,{}, {
-                withCredentials: true,
-            })
+            await apiClient.post("/request/review/" + status + "/" + id);
             dispatch(removeRequest(id));
         } catch (error) {
             console.log("Error: ", error.message);
@@ -23,9 +18,7 @@ const Request = () => {
 
     const handleRequest = async () => {
         try {
-            const response = await axios.get(API_URL + "/user/request/received", {
-                withCredentials: true,
-            })
+            const response = await apiClient.get("/user/request/received");
             console.log(response?.data?.getRequest);
             dispatch(addRequest(response?.data?.getRequest));
         } catch (error) {
@@ -101,10 +94,10 @@ const Request = () => {
                             </div>
                             <div className="card-actions">
                                 <button className="btn btn-primary"
-                                onClick={() => handleStatus("accepted" , request._id)}
+                                    onClick={() => handleStatus("accepted", request._id)}
                                 >Accept</button>
                                 <button className="btn btn-error"
-                                onClick={() => handleStatus("rejected" , request._id)}
+                                    onClick={() => handleStatus("rejected", request._id)}
                                 >Reject</button>
                             </div>
                         </div>

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Card from "./Card";
-import axios from "axios";
-import { API_URL } from "../utils/constants";
+import apiClient from "../utils/apiClient";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
@@ -22,8 +21,8 @@ const EditProfile = ({ user }) => {
     const handleSaveProfile = async () => {
         try {
 
-            const response = await axios.patch(
-                API_URL + "/profile/edit",
+            const response = await apiClient.patch(
+                "/profile/edit",
                 {
                     firstName,
                     lastName,
@@ -32,9 +31,6 @@ const EditProfile = ({ user }) => {
                     about,
                     photoURL,
                     skills: skills.split(",").map((s) => s.trim()).filter((s) => s !== ""),
-                },
-                {
-                    withCredentials: true,
                 }
             );
 
