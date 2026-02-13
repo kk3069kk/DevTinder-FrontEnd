@@ -9,6 +9,7 @@ import Connection from "./component/Connection"
 import Request from "./component/Request"
 import SignUp from "./component/SignUp"
 import Chat from "./component/Chat"
+import Gpt from "./component/gpt"
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
           <Route path="/request" element={<Request/>}  />
           <Route path="/signup" element={<SignUp/>}  />
           <Route path="/chat/:chatId" element={<Chat/>}  />
+          <Route path="/gpt" element={<Gpt/>}  />
         </Route>
       </Routes>
       </BrowserRouter>

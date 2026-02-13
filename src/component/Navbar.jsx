@@ -25,6 +25,7 @@ const Navbar = () => {
       <div className="flex-1">
         <Link to="/" className="btn btn-ghost text-xl">DevTinder</Link>
       </div>
+      <Link to="/gpt" className="btn btn-ghost text-xl">SearchBar</Link>
       <div className="flex gap-2">
         {(user && typeof user === "object" && user._id) && <p className="text-xl font-bold text-gray-400"> Hi {user?.firstName}</p>}
         <div className="dropdown dropdown-end">

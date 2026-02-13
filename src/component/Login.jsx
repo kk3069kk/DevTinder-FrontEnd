@@ -5,8 +5,8 @@ import { addUser } from '../utils/userSlice';
 import apiClient from '../utils/apiClient';
 
 const Login = () => {
-  const [emailId, setEmailId] = useState("kk1@gmail.com");
-  const [password, setPassword] = useState("Googlechrome@1");
+  const [emailId, setEmailId] = useState("");
+  const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
